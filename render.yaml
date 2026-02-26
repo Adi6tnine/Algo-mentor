@@ -2,17 +2,14 @@ services:
   # PostgreSQL Database
   - type: pserv
     name: algomentor-db
-    env: docker
     plan: free
-    region: oregon
     databaseName: algomentor
     databaseUser: algomentor_user
 
-  # Backend Web Service
+  # Backend Web Service (Spring Boot)
   - type: web
     name: algomentor-backend
-    env: java
-    region: oregon
+    runtime: java
     plan: free
     buildCommand: mvn clean package -DskipTests
     startCommand: java -Dserver.port=$PORT -jar target/algomentor-1.0.0.jar
@@ -35,10 +32,10 @@ services:
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_EXPIRATION
-        value: 18000000
+        value: "18000000"
       - key: CORS_ALLOWED_ORIGINS
         value: https://algomentor.netlify.app
       - key: RATE_LIMIT_REQUESTS
-        value: 100
+        value: "100"
       - key: RATE_LIMIT_DURATION
-        value: 60000
+        value: "60000"
