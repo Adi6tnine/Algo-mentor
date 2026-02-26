@@ -1,8 +1,4 @@
 services:
-  - type: pserv
-    name: algomentor-db
-    plan: free
-
   - type: web
     name: algomentor-backend
     runtime: docker
@@ -33,3 +29,7 @@ services:
         value: "100"
       - key: RATE_LIMIT_DURATION
         value: "60000"
+
+  - type: pserv
+    name: algomentor-db
+    plan: free
