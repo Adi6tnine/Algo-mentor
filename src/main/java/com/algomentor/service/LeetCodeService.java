@@ -30,7 +30,8 @@ public class LeetCodeService {
             String cleanUsername = extractUsername(username);
             String url = "https://leetcode.com/graphql";
             
-            String query = "{\"query\":\"query userPublicProfile($username: String!) { matchedUser(username: $username) { username submitStats: submitStatsGlobal { acSubmissionNum { difficulty count } } } recentSubmissionList(username: $username, limit: 20) { title titleSlug timestamp statusDisplay lang } }\",\"variables\":{\"username\":\"" + cleanUsername + "\"}}";
+            // Updated query to include difficulty in recent submissions
+            String query = "{\"query\":\"query userPublicProfile($username: String!) { matchedUser(username: $username) { username submitStats: submitStatsGlobal { acSubmissionNum { difficulty count } } } recentAcSubmissionList: recentAcSubmissionList(username: $username, limit: 20) { id title titleSlug timestamp } }\",\"variables\":{\"username\":\"" + cleanUsername + "\"}}";
             
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
@@ -79,25 +80,26 @@ public class LeetCodeService {
                         }
                     }
 
-                    if (profile != null && data.containsKey("recentSubmissionList")) {
+                    if (profile != null && data.containsKey("recentAcSubmissionList")) {
                         @SuppressWarnings("unchecked")
-                        List<Map<String, Object>> submissions = (List<Map<String, Object>>) data.get("recentSubmissionList");
+                        List<Map<String, Object>> submissions = (List<Map<String, Object>>) data.get("recentAcSubmissionList");
                         List<HackerRankProblemDTO> problems = new ArrayList<>();
                         
                         for (Map<String, Object> sub : submissions) {
-                            String status = (String) sub.get("statusDisplay");
-                            if ("Accepted".equals(status)) {
-                                long timestamp = Long.parseLong(sub.get("timestamp").toString());
-                                String solvedDate = java.time.Instant.ofEpochSecond(timestamp).toString();
-                                
-                                HackerRankProblemDTO p = new HackerRankProblemDTO();
-                                p.setTitle((String) sub.get("title"));
-                                p.setPlatform("LeetCode");
-                                p.setDifficulty("Medium"); // LeetCode recentSubmissionList doesn't provide difficulty unfortunately without more queries
-                                p.setStatus("solved");
-                                p.setSolvedDate(solvedDate);
-                                problems.add(p);
-                            }
+                            String titleSlug = (String) sub.get("titleSlug");
+                            long timestamp = Long.parseLong(sub.get("timestamp").toString());
+                            String solvedDate = java.time.Instant.ofEpochSecond(timestamp).toString();
+                            
+                            // Fetch difficulty for each problem
+                            String difficulty = fetchProblemDifficulty(titleSlug, restTemplate, headers);
+                            
+                            HackerRankProblemDTO p = new HackerRankProblemDTO();
+                            p.setTitle((String) sub.get("title"));
+                            p.setPlatform("LeetCode");
+                            p.setDifficulty(difficulty);
+                            p.setStatus("solved");
+                            p.setSolvedDate(solvedDate);
+                            problems.add(p);
                         }
                         profile.setRecentProblems(problems);
                         
@@ -116,6 +118,36 @@ public class LeetCodeService {
             logger.error("Error fetching LeetCode profile for {}: {}", username, e.getMessage());
             return HackerRankProfileDTO.error("Failed to fetch profile: " + e.getMessage());
         }
+    }
+    
+    /**
+     * Fetches the difficulty level for a specific LeetCode problem
+     */
+    private String fetchProblemDifficulty(String titleSlug, RestTemplate restTemplate, HttpHeaders headers) {
+        try {
+            String url = "https://leetcode.com/graphql";
+            String query = "{\"query\":\"query questionData($titleSlug: String!) { question(titleSlug: $titleSlug) { difficulty } }\",\"variables\":{\"titleSlug\":\"" + titleSlug + "\"}}";
+            
+            HttpEntity<String> entity = new HttpEntity<>(query, headers);
+            
+            @SuppressWarnings("unchecked")
+            Map<String, Object> response = restTemplate.postForObject(url, entity, Map.class);
+            
+            if (response != null && response.containsKey("data")) {
+                @SuppressWarnings("unchecked")
+                Map<String, Object> data = (Map<String, Object>) response.get("data");
+                if (data != null && data.containsKey("question")) {
+                    @SuppressWarnings("unchecked")
+                    Map<String, Object> question = (Map<String, Object>) data.get("question");
+                    if (question != null && question.containsKey("difficulty")) {
+                        return (String) question.get("difficulty");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.warn("Failed to fetch difficulty for {}: {}", titleSlug, e.getMessage());
+        }
+        return "Medium"; // Fallback
     }
     
     /**
