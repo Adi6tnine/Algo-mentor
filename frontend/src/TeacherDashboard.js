@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 import { 
-  School, Users, BarChart3, AlertCircle, FileText, LogOut, 
-  Menu, Bell, ChevronRight, LayoutDashboard, Settings, 
-  Loader2, Download, RefreshCw, TrendingUp, Code2
+  School, Users, BarChart3, AlertCircle, LogOut, 
+  Menu, Bell, ChevronRight, Settings, 
+  Loader2, Download, RefreshCw, TrendingUp
 } from 'lucide-react';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api/v1';
@@ -55,6 +55,7 @@ function TeacherDashboard({ onLogout }) {
 
   useEffect(() => {
     loadSections();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

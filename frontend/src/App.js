@@ -3,8 +3,7 @@ import axios from 'axios';
 import './App.css';
 import { 
   LayoutDashboard, Code2, TrendingUp, Settings, LogOut, Search, Bell, 
-  ChevronRight, Menu, Users, School, AlertCircle, FileText, 
-  ArrowUpRight, Loader2, CheckCircle2, Zap, BarChart3, Clock, Award 
+  ChevronRight, Menu, Loader2, CheckCircle2, Zap, BarChart3, Clock, Award 
 } from 'lucide-react';
 import AnalyticsDashboard from './components/AnalyticsDashboard';
 
@@ -73,10 +72,8 @@ function App({ user, onLogout }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
   
-  const [students, setStudents] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [problems, setProblems] = useState([]);
-  const [stats, setStats] = useState(null);
   const [fetchingData, setFetchingData] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -88,6 +85,7 @@ function App({ user, onLogout }) {
   useEffect(() => {
     loadStudents();
     loadStats();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -99,7 +97,6 @@ function App({ user, onLogout }) {
   const loadStudents = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/students/me`);
-      setStudents([response.data]);
       if (!selectedStudent) {
         setSelectedStudent(response.data);
       }
@@ -119,8 +116,7 @@ function App({ user, onLogout }) {
 
   const loadStats = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/stats`);
-      setStats(response.data);
+      await axios.get(`${API_BASE_URL}/stats`);
     } catch (error) {
       console.error('Error loading stats:', error);
     }

@@ -4,17 +4,6 @@ import './Login.css';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api/v1';
 
-// Auto-detect current batch year (academic year: July-June)
-const getCurrentBatch = () => {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth(); // 0-11
-
-  // If before July (month 6), use previous year for batch
-  const academicYear = month < 6 ? year - 1 : year;
-  return `${String(academicYear).slice(-2)}BCS`;
-};
-
 // Generate valid section options: 601-620, 701-720, 801-820
 const VALID_SECTIONS = [
   ...Array.from({ length: 20 }, (_, i) => (601 + i).toString()),
