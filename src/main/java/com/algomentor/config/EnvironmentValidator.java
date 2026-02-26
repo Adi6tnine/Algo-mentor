@@ -17,14 +17,8 @@ public class EnvironmentValidator {
     @Value("${jwt.secret}")
     private String jwtSecret;
     
-    @Value("${spring.datasource.url}")
+    @Value("${DATABASE_URL:}")
     private String databaseUrl;
-    
-    @Value("${spring.datasource.username}")
-    private String databaseUsername;
-    
-    @Value("${spring.datasource.password}")
-    private String databasePassword;
     
     @Value("${cors.allowed.origins}")
     private String corsAllowedOrigins;
@@ -35,8 +29,6 @@ public class EnvironmentValidator {
         
         validateNotEmpty("JWT_SECRET", jwtSecret);
         validateNotEmpty("DATABASE_URL", databaseUrl);
-        validateNotEmpty("DATABASE_USERNAME", databaseUsername);
-        validateNotEmpty("DATABASE_PASSWORD", databasePassword);
         validateNotEmpty("CORS_ALLOWED_ORIGINS", corsAllowedOrigins);
         
         // Validate JWT secret strength
