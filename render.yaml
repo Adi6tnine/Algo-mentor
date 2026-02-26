@@ -4,12 +4,14 @@ services:
     plan: free
     databaseName: algomentor
     databaseUser: algomentor_user
+    region: oregon
 
   - type: web
     name: algomentor-backend
     env: java
     plan: free
     region: oregon
+    branch: main
     buildCommand: mvn clean package -DskipTests
     startCommand: java -Dserver.port=$PORT -jar target/algomentor-1.0.0.jar
     healthCheckPath: /actuator/health
