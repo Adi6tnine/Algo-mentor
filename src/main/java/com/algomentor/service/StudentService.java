@@ -86,10 +86,23 @@ public class StudentService {
         dto.setEmail(student.getEmail());
         dto.setRollNumber(student.getRollNumber());
         dto.setSection(student.getSection());
+        dto.setGroup(student.getGroup());
         dto.setHackerrankProfile(student.getHackerrankProfile());
         dto.setLeetcodeProfile(student.getLeetcodeProfile());
         dto.setProblemCount(student.getProblemCount());
         dto.setCreatedAt(student.getCreatedAt());
+        
+        // Include stats
+        dto.setHackerRankTotal(student.getHackerRankTotal());
+        dto.setHackerRankEasy(student.getHackerRankEasy());
+        dto.setHackerRankMedium(student.getHackerRankMedium());
+        dto.setHackerRankHard(student.getHackerRankHard());
+        
+        dto.setLeetCodeTotal(student.getLeetCodeTotal());
+        dto.setLeetCodeEasy(student.getLeetCodeEasy());
+        dto.setLeetCodeMedium(student.getLeetCodeMedium());
+        dto.setLeetCodeHard(student.getLeetCodeHard());
+        
         return dto;
     }
 }
