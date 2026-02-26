@@ -1,0 +1,29 @@
+<svg width="32" height="32" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="primaryGrad" x1="120" y1="100" x2="400" y2="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#4F46E5" />
+      <stop offset="100%" stop-color="#312E81" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="200" y1="200" x2="350" y2="350" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <radialGradient id="eyeGrad" cx="256" cy="240" r="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ECFDF5" />
+      <stop offset="70%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#064E3B" />
+    </radialGradient>
+  </defs>
+  <g filter="drop-shadow(0px 20px 30px rgba(79, 70, 229, 0.15))">
+    <path d="M256 80L100 400H180L256 210L332 400H412L256 80Z" fill="url(#primaryGrad)" />
+    <path d="M256 80L332 400H412L256 80Z" fill="black" fill-opacity="0.15" />
+    <path d="M195 240L256 210L317 240L256 270L195 240Z" fill="url(#accentGrad)" />
+    <g transform="translate(256, 240)">
+      <circle r="18" fill="url(#eyeGrad)" stroke="white" stroke-width="2" />
+      <circle r="8" fill="#064E3B" />
+      <circle cx="-5" cy="-5" r="3" fill="white" fill-opacity="0.8" />
+    </g>
+    <path d="M256 140L195 290H317L256 140Z" fill="white" fill-opacity="0.05" />
+  </g>
+  <path d="M256 20L470 138V374L256 492L42 374V138L256 20Z" stroke="#E2E8F0" stroke-width="1.5" stroke-dasharray="10 10" />
+</svg>
