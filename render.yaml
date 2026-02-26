@@ -5,10 +5,9 @@ services:
 
   - type: web
     name: algomentor-backend
-    env: java
+    runtime: docker
     plan: free
-    buildCommand: mvn clean package -DskipTests
-    startCommand: java -Dserver.port=$PORT -jar target/algomentor-1.0.0.jar
+    dockerfilePath: ./Dockerfile.render
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
