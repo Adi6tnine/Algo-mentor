@@ -34,7 +34,7 @@ services:
       - key: JWT_EXPIRATION
         value: "18000000"
       - key: CORS_ALLOWED_ORIGINS
-        value: https://algomentor.netlify.app
+        value: https://algo-mentor.netlify.app
       - key: RATE_LIMIT_REQUESTS
         value: "100"
       - key: RATE_LIMIT_DURATION
