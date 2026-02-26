@@ -2,8 +2,6 @@ services:
   - type: pserv
     name: algomentor-db
     plan: free
-    databaseName: algomentor
-    databaseUser: algomentor_user
 
   - type: web
     name: algomentor-backend
