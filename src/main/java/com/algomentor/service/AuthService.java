@@ -37,6 +37,17 @@ public class AuthService {
         try {
             logger.info("Attempting signup for email: {}", request.getEmail());
             
+            // Validate required fields
+            if (request.getName() == null || request.getName().trim().isEmpty()) {
+                logger.warn("Signup failed: Name is required");
+                return new AuthResponse("Name is required");
+            }
+            
+            if (request.getEmail() == null || request.getEmail().trim().isEmpty()) {
+                logger.warn("Signup failed: Email is required");
+                return new AuthResponse("Email is required");
+            }
+            
             if (userRepository.existsByEmail(request.getEmail())) {
                 logger.warn("Signup failed: Email already exists - {}", request.getEmail());
                 return new AuthResponse("Email already exists");
@@ -45,9 +56,20 @@ public class AuthService {
             // Force role to STUDENT
             String requestedRole = "STUDENT";
             
-            if (request.getRollNumber() != null && !request.getRollNumber().trim().isEmpty() && studentRepository.existsByRollNumber(request.getRollNumber())) {
+            // Validate student-specific fields
+            if (request.getRollNumber() == null || request.getRollNumber().trim().isEmpty()) {
+                logger.warn("Signup failed: Roll number is required");
+                return new AuthResponse("Roll number is required");
+            }
+            
+            if (studentRepository.existsByRollNumber(request.getRollNumber())) {
                 logger.warn("Signup failed: Roll number already exists - {}", request.getRollNumber());
                 return new AuthResponse("Roll number already exists");
+            }
+            
+            if (request.getSection() == null || request.getSection().trim().isEmpty()) {
+                logger.warn("Signup failed: Section is required");
+                return new AuthResponse("Section is required");
             }
             
             // Create user
@@ -69,7 +91,8 @@ public class AuthService {
                 student.setLeetcodeProfile(request.getLeetcodeProfile() != null && !request.getLeetcodeProfile().trim().isEmpty() 
                     ? request.getLeetcodeProfile() : null);
                 student.setSection(request.getSection());
-                student.setGroup(request.getGroup());
+                student.setGroup(request.getGroup() != null && !request.getGroup().trim().isEmpty() 
+                    ? request.getGroup() : null);
                 student.setUser(user);
                 student = studentRepository.save(student);
                 logger.info("Student created with ID: {}", student.getId());

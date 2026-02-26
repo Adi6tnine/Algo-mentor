@@ -1,8 +1,6 @@
 package com.algomentor.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,16 +13,12 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @NotBlank(message = "Name is required")
     @Column(nullable = false)
     private String name;
     
-    @NotBlank(message = "Email is required")
-    @Email(message = "Email should be valid")
     @Column(unique = true, nullable = false)
     private String email;
     
-    @NotBlank(message = "Roll number is required")
     @Column(name = "roll_number", unique = true, nullable = false)
     private String rollNumber;
     
@@ -34,7 +28,6 @@ public class Student {
     @Column(name = "leetcode_profile")
     private String leetcodeProfile;
     
-    @NotBlank(message = "Section is required")
     @Column(name = "section", nullable = false)
     private String section;
 
