@@ -1,3 +1,7 @@
+databases:
+  - name: algomentor-db
+    plan: free
+
 services:
   - type: web
     name: algomentor-backend
@@ -29,7 +33,3 @@ services:
         value: "100"
       - key: RATE_LIMIT_DURATION
         value: "60000"
-
-  - type: pserv
-    name: algomentor-db
-    plan: free
